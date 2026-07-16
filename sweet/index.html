@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Candy Bonanza</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Efecto de burbujas flotantes de fondo -->
+    <div class="bubble-bg"></div>
+
+    <div class="game-container">
+        <!-- PANEL LATERAL IZQUIERDO -->
+        <div class="side-panel">
+            <button class="btn-buy pink" id="btn-buy-free">
+                <span class="btn-title">COMPRAR GIROS GRATIS</span>
+                <span class="btn-value" id="buy-fs-cost">$200.00</span>
+            </button>
+            <button class="btn-buy orange" id="btn-buy-super">
+                <span class="btn-title">COMPRAR SUPER GIROS</span>
+                <span class="btn-value" id="buy-super-cost">$1,000.00</span>
+            </button>
+            
+            <div class="bet-double-box">
+                <span class="bet-double-title">APUESTA</span>
+                <span class="bet-double-value" id="double-bet-display">$2.50</span>
+                <span class="bet-double-sub">DOBLE CHANCE DE GANAR</span>
+                <div class="toggle-container">
+                    <span class="toggle-text">OFF</span>
+                    <label class="switch">
+                        <input type="checkbox" id="double-chance-toggle">
+                        <span class="slider round"></span>
+                    </label>
+                    <span class="toggle-text">ON</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- ÁREA PRINCIPAL DEL JUEGO -->
+        <div class="main-game">
+            <!-- MARCADOR DE GANANCIA DE BONUS GIGANTE -->
+            <div class="bonus-header-win" id="bonus-header-win">
+                <div class="bonus-title">GANANCIA TOTAL DEL BONUS</div>
+                <div class="bonus-total-amount" id="bonus-total-amount">$0.00</div>
+            </div>
+
+            <!-- ACUMULADOR TEMPORAL DEL TIRO EN CURSO -->
+            <div class="spin-win-accumulator" id="spin-win-accumulator">
+                <span class="accum-label">GANANCIA DEL TIRO:</span>
+                <span class="accum-value" id="accum-value">$0.00</span>
+                <span class="accum-mult" id="accum-mult"></span>
+            </div>
+
+            <!-- Grilla Sweet Bonanza -->
+            <div class="slot-grid-container">
+                <div class="slot-grid" id="slot-grid">
+                    <!-- Se genera con JavaScript -->
+                </div>
+            </div>
+
+            <!-- BARRA DE CONTROL INFERIOR -->
+            <div class="control-bar">
+                <div class="info-section">
+                    <button class="info-btn" id="info-btn">i</button>
+                </div>
+                
+                <div class="stats-section">
+                    <div class="stat-box">
+                        <span class="stat-label">CRÉDITO</span>
+                        <span class="stat-value" id="credit-display">$10,000.00</span>
+                    </div>
+                    <div class="stat-box">
+                        <span class="stat-label">APUESTA</span>
+                        <span class="stat-value" id="bet-display">$2.00</span>
+                    </div>
+                    <div class="stat-box">
+                        <span class="stat-label">ÚLTIMO PREMIO</span>
+                        <span class="stat-value win" id="win-display">$0.00</span>
+                    </div>
+                </div>
+
+                <div class="status-msg" id="status-message">
+                    ¡HACÉ JUGAR ESOS DULCES!
+                </div>
+
+                <div class="spin-section">
+                    <button class="bet-adjust" id="bet-minus">-</button>
+                    <div class="spin-outer">
+                        <button class="spin-btn" id="spin-button">↻</button>
+                    </div>
+                    <button class="bet-adjust" id="bet-plus">+</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PANTALLA ANUNCIO DE GIROS GRATIS -->
+    <div class="fs-overlay" id="fs-overlay">
+        <div class="fs-box">
+            <h2 id="fs-overlay-title">¡MODO GIROS GRATIS!</h2>
+            <p id="fs-count">10 GIROS GANADOS</p>
+        </div>
+    </div>
+
+    <!-- PANTALLA DE REGLAS E INFORMACIÓN (MODAL) -->
+    <div class="info-modal" id="info-modal">
+        <div class="info-content">
+            <span class="close-modal" id="close-modal">&times;</span>
+            <h2>🍭 REGLAS DEL JUEGO 🍬</h2>
+            <div class="info-scroll">
+                <h3>MECÁNICA PRINCIPAL</h3>
+                <p><strong>"Pay Anywhere" (Paga donde sea):</strong> ¡No existen las líneas de pago! Los premios se otorgan si lográs juntar <strong>8 o más símbolos idénticos</strong> en cualquier parte de la pantalla.</p>
+                <p><strong>Mecánica de Cascada (Tumble):</strong> Al ganar, los dulces que combinaron explotan y desaparecen. Los símbolos de arriba caen para llenar los huecos, y nuevos dulces entran desde el techo, pudiendo generar infinitas victorias consecutivas en un solo tiro.</p>
+
+                <hr>
+
+                <h3>TABLA DE PAGOS (Basada en tu Apuesta)</h3>
+                <table class="payout-table">
+                    <thead>
+                        <tr>
+                            <th>Símbolo</th>
+                            <th>8 - 9</th>
+                            <th>10 - 11</th>
+                            <th>12 o más</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>💖 Corazón</td><td>x10.0</td><td>x15.0</td><td>x30.0</td></tr>
+                        <tr><td>💜 Caramelo</td><td>x5.0</td><td>x7.5</td><td>x15.0</td></tr>
+                        <tr><td>💚 Caramelo</td><td>x4.0</td><td>x6.0</td><td>x12.0</td></tr>
+                        <tr><td>💙 Caramelo</td><td>x3.0</td><td>x4.5</td><td>x9.0</td></tr>
+                        <tr><td>🍎 Manzana</td><td>x2.0</td><td>x3.0</td><td>x6.0</td></tr>
+                        <tr><td>🍑 Ciruela</td><td>x1.5</td><td>x2.25</td><td>x4.5</td></tr>
+                        <tr><td>🍉 Sandía</td><td>x1.0</td><td>x1.5</td><td>x3.0</td></tr>
+                        <tr><td>🍇 Uva</td><td>x0.8</td><td>x1.2</td><td>x2.4</td></tr>
+                        <tr><td>🍌 Banana</td><td>x0.5</td><td>x0.75</td><td>x1.5</td></tr>
+                        <tr><td>🍭 Paleta (Scatter)</td><td colspan="3">4+ en pantalla paga x15.0 y activa Giros Gratis</td></tr>
+                    </tbody>
+                </table>
+
+                <hr>
+
+                <h3>MODO GIROS GRATIS (BONUS)</h3>
+                <p>Se activa al conseguir <strong>4 o más Paletas (🍭)</strong> en el juego base, o bien comprando el Bonus de forma directa.</p>
+                <ul>
+                    <li><strong>Tiros Iniciales:</strong> Recibís 10 Giros Gratis.</li>
+                    <li><strong>Giros Extras:</strong> Si caen <strong>4 o más Paletas</strong> durante el Bonus, se suman <strong>+5 Giros adicionales</strong> inmediatamente.</li>
+                    <li><strong>Bombas Multiplicadoras (💣):</strong> Aparecen de forma exclusiva en el bonus con valores que van desde <strong>x2 hasta x100</strong>. Al finalizar todas las cascadas de un tiro, se suman todas las bombas visibles y multiplican la ganancia acumulada de ese tiro.</li>
+                </ul>
+
+                <hr>
+
+                <h3>SUPER GIROS GRATIS (SUPER BONUS)</h3>
+                <p>Adquirible de forma exclusiva desde el panel lateral por x500 tu apuesta base. Garantiza 15 giros iniciales, una altísima aparición de bombas multiplicadoras y elimina los multiplicadores más bajos (las bombas serán de mínimo x10 hasta un máximo de x100).</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
