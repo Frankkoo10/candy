@@ -1,0 +1,647 @@
+:root {
+    --bg-pink: #ffb1df;
+    --bg-blue: #93d5ff;
+    --gold: #ffd700;
+    --candy-pink: #ff3385;
+    --candy-blue: #33a8ff;
+    --dark-purple: #23083b;
+    --neon-green: #3bf13b;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Arial Black', Impact, sans-serif;
+    user-select: none;
+}
+
+body {
+    background: linear-gradient(135deg, var(--bg-pink) 0%, var(--bg-blue) 100%);
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    position: relative;
+}
+
+/* Burbujas de azúcar animadas de fondo */
+.bubble-bg {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-image: 
+        radial-gradient(circle, rgba(255,255,255,0.3) 10%, transparent 10%),
+        radial-gradient(circle, rgba(255,255,255,0.2) 15%, transparent 15%);
+    background-size: 80px 80px;
+    background-position: 0 0, 40px 40px;
+    animation: floatBackground 20s linear infinite;
+    z-index: 0;
+}
+
+@keyframes floatBackground {
+    from { background-position: 0 0, 40px 40px; }
+    to { background-position: 0 -80px, 40px -120px; }
+}
+
+/* Contenedor Principal */
+.game-container {
+    display: flex;
+    width: 95vw;
+    max-width: 1180px;
+    height: 88vh;
+    max-height: 650px;
+    background: rgba(255, 255, 255, 0.25);
+    border-radius: 32px;
+    padding: 16px;
+    box-shadow: 0 30px 60px rgba(0,0,0,0.25), inset 0 4px 10px rgba(255,255,255,0.5);
+    backdrop-filter: blur(12px);
+    gap: 15px;
+    z-index: 1;
+}
+
+/* Panel Lateral (Botones 3D Caramelo) */
+.side-panel {
+    width: 23%;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    justify-content: center;
+}
+
+.btn-buy {
+    border: 3px solid #fff;
+    border-radius: 20px;
+    padding: 12px;
+    color: white;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-shadow: 0 8px 0px rgba(0,0,0,0.15), 0 10px 15px rgba(0,0,0,0.2);
+    transition: transform 0.05s, box-shadow 0.05s;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Efecto Brillo Caramelo */
+.btn-buy::before {
+    content: '';
+    position: absolute;
+    top: 2px; left: 5%; width: 90%; height: 35%;
+    background: rgba(255, 255, 255, 0.4);
+    border-radius: 10px;
+}
+
+.btn-buy:active {
+    transform: translateY(4px);
+    box-shadow: 0 4px 0px rgba(0,0,0,0.15), 0 5px 10px rgba(0,0,0,0.2);
+}
+
+.pink { background: linear-gradient(to bottom, #ff5ea6, #ff0066); }
+.orange { background: linear-gradient(to bottom, #ff9e42, #ff6600); }
+
+.btn-title {
+    font-size: 11px;
+    text-shadow: 2px 2px 0px rgba(0,0,0,0.4);
+    text-align: center;
+    letter-spacing: 0.5px;
+}
+
+.btn-value {
+    font-size: 20px;
+    text-shadow: 2px 2px 0px rgba(0,0,0,0.5);
+    color: var(--gold);
+    margin-top: 4px;
+}
+
+/* Caja de Apuesta Extra */
+.bet-double-box {
+    background: linear-gradient(to bottom, #5ce65c, #1ba31b);
+    border: 3px solid #fff;
+    border-radius: 20px;
+    padding: 12px;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-shadow: 2px 2px 0px rgba(0,0,0,0.4);
+    box-shadow: 0 8px 0px rgba(0,0,0,0.15), 0 10px 15px rgba(0,0,0,0.2);
+    position: relative;
+}
+
+.bet-double-box::before {
+    content: '';
+    position: absolute;
+    top: 2px; left: 5%; width: 90%; height: 30%;
+    background: rgba(255,255,255,0.3);
+    border-radius: 10px;
+}
+
+.bet-double-title { font-size: 11px; }
+.bet-double-value { font-size: 22px; margin: 4px 0; color: #fff; }
+.bet-double-sub { font-size: 8px; text-align: center; margin-bottom: 8px; opacity: 0.9; }
+
+/* Switch Slider */
+.toggle-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.toggle-text { font-size: 10px; }
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 44px;
+    height: 18px;
+}
+.switch input { display: none; }
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-color: #aaa;
+    transition: .3s;
+}
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 12px; width: 12px;
+    left: 3px; bottom: 3px;
+    background-color: white;
+    transition: .3s;
+}
+input:checked + .slider { background-color: #ffee00; }
+input:checked + .slider:before { transform: translateX(26px); }
+.slider.round { border-radius: 18px; }
+.slider.round:before { border-radius: 50%; }
+
+/* Área Principal */
+.main-game {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: relative;
+}
+
+/* MARCADOR DEL BONUS ACUMULADO ARRIBA */
+.bonus-header-win {
+    background: linear-gradient(135deg, #ff007f, #7f00ff);
+    border: 4px solid var(--gold);
+    border-radius: 20px;
+    padding: 10px 20px;
+    text-align: center;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.3), inset 0 2px 6px rgba(255,255,255,0.4);
+    display: none; 
+    flex-direction: column;
+    align-items: center;
+    animation: floaty 3s ease-in-out infinite alternate;
+    margin-bottom: 5px;
+}
+
+@keyframes floaty {
+    0% { transform: translateY(0px); }
+    100% { transform: translateY(-5px); }
+}
+
+.bonus-title {
+    font-size: 11px;
+    color: #fff;
+    letter-spacing: 1px;
+    text-shadow: 2px 2px 0px #000;
+}
+
+.bonus-total-amount {
+    font-size: 26px;
+    color: var(--gold);
+    text-shadow: 3px 3px 0px #000;
+    font-weight: bold;
+}
+
+/* ACUMULADOR DE POZO DEL TIRO EN CURSO */
+.spin-win-accumulator {
+    background: rgba(0, 0, 0, 0.8);
+    border: 2px solid var(--gold);
+    border-radius: 30px;
+    padding: 6px 15px;
+    display: none; 
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 5px;
+    animation: scaleIn 0.2s ease-out;
+}
+
+.accum-label {
+    font-size: 11px;
+    color: #aaa;
+}
+
+.accum-value {
+    font-size: 18px;
+    color: #fff;
+    text-shadow: 0 0 10px var(--gold);
+}
+
+.accum-mult {
+    font-size: 18px;
+    color: var(--neon-green);
+    font-weight: bold;
+}
+
+/* Contenedor Grilla */
+.slot-grid-container {
+    flex-grow: 1;
+    position: relative;
+    border: 10px solid;
+    border-image: repeating-linear-gradient(45deg, #ff4d4d, #ff4d4d 15px, #ffffff 15px, #ffffff 30px) 10;
+    border-radius: 24px;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+    overflow: hidden;
+}
+
+/* Grilla Interna */
+.slot-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-template-rows: repeat(5, 1fr);
+    gap: 6px;
+    background: radial-gradient(circle, rgba(255,255,255,0.6) 0%, rgba(255,255,255,0.35) 100%);
+    padding: 8px;
+    height: 100%;
+}
+
+/* Celdas Dulce Gelatinosas */
+.slot-cell {
+    background: rgba(255, 255, 255, 0.75);
+    border-radius: 14px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2.5rem;
+    box-shadow: inset 0 3px 5px rgba(255,255,255,0.8), 0 5px 10px rgba(0,0,0,0.1);
+    position: relative;
+    transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* Sombra 3D en Emojis */
+.slot-cell span {
+    filter: drop-shadow(3px 4px 3px rgba(0,0,0,0.25));
+    display: inline-block;
+}
+
+/* Animación de caída de caramelos con rebote */
+.slot-cell.landing {
+    animation: jellyBounce 0.5s ease-out;
+}
+
+@keyframes jellyBounce {
+    0% { transform: scaleY(1.3) translateY(-100px); }
+    40% { transform: scaleY(0.7) translateY(0); }
+    65% { transform: scaleY(1.15); }
+    80% { transform: scaleY(0.9); }
+    100% { transform: scaleY(1); }
+}
+
+/* Bombas Multiplicadoras Estilo Bomba de Dulce */
+.bomb-badge {
+    position: absolute;
+    bottom: 3px;
+    right: 3px;
+    background: linear-gradient(135deg, #ffd700, #ff0055);
+    color: white;
+    font-size: 11px;
+    padding: 2px 6px;
+    border-radius: 8px;
+    border: 1.5px solid white;
+    text-shadow: 1px 1px 2px black;
+    box-shadow: 0 3px 5px rgba(0,0,0,0.3);
+    font-weight: bold;
+}
+
+/* Animaciones de Juego */
+.slot-cell.spinning span {
+    animation: spinFall 0.1s infinite linear;
+}
+
+.slot-cell.win-pop {
+    animation: popOut 0.4s forwards;
+}
+
+.slot-cell.win-highlight {
+    background: radial-gradient(circle, #fff7ad 0%, #ffd700 100%);
+    transform: scale(1.1);
+    box-shadow: 0 0 20px var(--gold);
+    z-index: 2;
+}
+
+.slot-cell.bomb-pulse {
+    animation: bombPulseAnimation 0.5s infinite alternate;
+}
+
+@keyframes bombPulseAnimation {
+    0% { transform: scale(1); box-shadow: 0 0 10px #ff0055; }
+    100% { transform: scale(1.15); box-shadow: 0 0 25px #ffd700; }
+}
+
+/* Barra de Control Inferior */
+.control-bar {
+    background: var(--dark-purple);
+    border-radius: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 6px 20px;
+    color: white;
+    border: 3px solid #fff;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+    margin-top: 10px;
+}
+
+.info-btn {
+    background: #444;
+    color: white;
+    width: 30px;
+    height: 30px;
+    border: 2px solid #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 16px;
+    transition: transform 0.1s, background-color 0.2s;
+}
+
+.info-btn:hover {
+    background-color: var(--candy-pink);
+    transform: scale(1.1);
+}
+
+.stats-section {
+    display: flex;
+    gap: 20px;
+}
+
+.stat-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.stat-label {
+    font-size: 8px;
+    color: #927da8;
+}
+
+.stat-value {
+    font-size: 15px;
+    color: var(--gold);
+}
+
+.stat-value.win {
+    color: var(--neon-green);
+}
+
+.status-msg {
+    font-size: 11px;
+    color: #fff;
+    text-align: center;
+    max-width: 250px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.spin-section {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.bet-adjust {
+    background: #333;
+    color: white;
+    border: 1px solid #fff;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    font-size: 18px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.spin-outer {
+    background: linear-gradient(to bottom, #fff, #bbb);
+    padding: 3px;
+    border-radius: 50%;
+}
+
+.spin-btn {
+    background: linear-gradient(to bottom, #33ccff, #0055ff);
+    color: white;
+    border: none;
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    font-size: 26px;
+    cursor: pointer;
+    box-shadow: 0 5px 10px rgba(0,0,0,0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.05s;
+}
+
+.spin-btn:active {
+    transform: scale(0.9);
+}
+
+/* Overlays */
+.fs-overlay {
+    position: fixed;
+    top: 0; left: 0; width: 100vw; height: 100vh;
+    background: rgba(0,0,0,0.85);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+}
+
+.fs-box {
+    background: linear-gradient(135deg, #ff007f, #7f00ff);
+    padding: 45px;
+    border-radius: 28px;
+    border: 6px solid var(--gold);
+    color: white;
+    text-align: center;
+    box-shadow: 0 0 50px var(--gold);
+    animation: scaleUp 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.fs-box h2 {
+    font-size: 36px;
+    margin-bottom: 12px;
+    text-shadow: 3px 3px 0px #000;
+}
+
+.fs-box p {
+    font-size: 22px;
+    text-shadow: 2px 2px 0px #000;
+    color: var(--gold);
+}
+
+/* =========================================
+   NUEVOS ESTILOS DEL MODAL DE INFORMACIÓN
+   ========================================= */
+.info-modal {
+    position: fixed;
+    top: 0; left: 0; 
+    width: 100vw; height: 100vh;
+    background: rgba(0, 0, 0, 0.8);
+    display: none; /* Se activa con JS */
+    justify-content: center;
+    align-items: center;
+    z-index: 200;
+}
+
+.info-content {
+    background: linear-gradient(135deg, #1f0833 0%, #3e125e 100%);
+    border: 5px solid var(--gold);
+    border-radius: 28px;
+    width: 90%;
+    max-width: 600px;
+    max-height: 80vh;
+    padding: 24px;
+    color: white;
+    position: relative;
+    box-shadow: 0 0 40px rgba(255, 215, 0, 0.35);
+    display: flex;
+    flex-direction: column;
+    animation: scaleUp 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.info-content h2 {
+    font-size: 24px;
+    text-align: center;
+    margin-bottom: 15px;
+    color: var(--gold);
+    text-shadow: 2px 2px 0px #000;
+}
+
+/* Contenedor con Scroll para las Reglas */
+.info-scroll {
+    overflow-y: auto;
+    padding-right: 10px;
+}
+
+/* Estilización de Barra de Desplazamiento (Scroll) */
+.info-scroll::-webkit-scrollbar {
+    width: 8px;
+}
+.info-scroll::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+}
+.info-scroll::-webkit-scrollbar-thumb {
+    background: var(--candy-pink);
+    border-radius: 10px;
+}
+
+.info-scroll h3 {
+    font-size: 14px;
+    color: var(--candy-pink);
+    margin-top: 15px;
+    margin-bottom: 8px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+.info-scroll p, .info-scroll ul {
+    font-size: 11px;
+    line-height: 1.5;
+    font-family: 'Arial', sans-serif; /* Más legible para textos largos */
+    color: #e0d0f0;
+    margin-bottom: 10px;
+}
+
+.info-scroll ul {
+    padding-left: 18px;
+}
+
+.info-scroll ul li {
+    margin-bottom: 6px;
+}
+
+.info-scroll hr {
+    border: 0;
+    height: 2px;
+    background: linear-gradient(to right, transparent, rgba(255,255,255,0.15), transparent);
+    margin: 15px 0;
+}
+
+/* Estilo de la Tabla de Pagos */
+.payout-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 12px 0;
+    font-size: 11px;
+}
+
+.payout-table th, .payout-table td {
+    padding: 6px;
+    text-align: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.payout-table th {
+    background: rgba(255, 255, 255, 0.08);
+    color: var(--gold);
+    font-size: 10px;
+}
+
+.payout-table td:first-child {
+    font-size: 14px; /* Emojis más grandes en la tabla */
+}
+
+/* Botón de Cerrar Modal "X" */
+.close-modal {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 32px;
+    color: #aaa;
+    cursor: pointer;
+    transition: color 0.2s, transform 0.2s;
+}
+
+.close-modal:hover {
+    color: #ff3333;
+    transform: scale(1.1);
+}
+
+/* Animaciones */
+@keyframes spinFall {
+    0% { transform: translateY(-12px); }
+    100% { transform: translateY(12px); }
+}
+
+@keyframes popOut {
+    0% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.3); opacity: 0.5; }
+    100% { transform: scale(0); opacity: 0; }
+}
+
+@keyframes scaleUp {
+    0% { transform: scale(0.6); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes scaleIn {
+    0% { transform: scale(0.8); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+}
