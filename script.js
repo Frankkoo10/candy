@@ -1,13 +1,12 @@
 // ==========================================
-// CONFIGURACIÓN DE SUPABASE (REEMPLAZA ESTOS DATOS)
+// 1. CONFIGURACIÓN DE SUPABASE
 // ==========================================
-const SUPABASE_URL = 'https://wgqqbahoalozgfukioza.supabase.co';
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndncXFiYWhvYWxvemdmdWtpb3phIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQyNTA3OTYsImV4cCI6MjA5OTgyNjc5Nn0.v_kpYceS8ceIUBNaLLHjfyBeFA2Y3lDRy7Yn6cb5Uz8';
-const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const supabaseUrl = 'https://wgqqbahoalozgfukioza.supabase.co';
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndncXFiYWhvYWxvemdmdWtpb3phIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQyNTA3OTYsImV4cCI6MjA5OTgyNjc5Nn0.v_kpYceS8ceIUBNaLLHjfyBeFA2Y3lDRy7Yn6cb5Uz8';
+const supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
 
-const ID_DEL_USUARIO = 'ID_DEL_JUGADOR_AQUI'; // Cambia esto según tu sistema de login
-const NOMBRE_TABLA_USUARIOS = 'usuarios';     // El nombre de tu tabla en Supabase
-const NOMBRE_COLUMNA_SALDO = 'saldo';         // El nombre de tu columna de dinero
+let currentUser = null;
+
 
 // ==========================================
 // ESTADO GENERAL DEL JUEGO
