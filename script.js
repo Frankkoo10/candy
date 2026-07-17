@@ -1,18 +1,25 @@
+// ==========================================
+// CONFIGURACIÓN DE SUPABASE (REEMPLAZA ESTOS DATOS)
+// ==========================================
+const SUPABASE_URL = 'https://wgqqbahoalozgfukioza.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndncXFiYWhvYWxvemdmdWtpb3phIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQyNTA3OTYsImV4cCI6MjA5OTgyNjc5Nn0.v_kpYceS8ceIUBNaLLHjfyBeFA2Y3lDRy7Yn6cb5Uz8';
+const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+const ID_DEL_USUARIO = 'ID_DEL_JUGADOR_AQUI'; // Cambia esto según tu sistema de login
+const NOMBRE_TABLA_USUARIOS = 'usuarios';     // El nombre de tu tabla en Supabase
+const NOMBRE_COLUMNA_SALDO = 'saldo';         // El nombre de tu columna de dinero
+
+// ==========================================
+// ESTADO GENERAL DEL JUEGO
+// ==========================================
 const symbols = [
-    { char: '💖', val: 10 },    // Corazón Rojo
-    { char: '💜', val: 5 },     // Caramelo Púrpura
-    { char: '💚', val: 4 },     // Caramelo Verde
-    { char: '💙', val: 3 },     // Caramelo Azul
-    { char: '🍎', val: 2 },     // Manzana
-    { char: '🍑', val: 1.5 },   // Ciruela
-    { char: '🍉', val: 1 },     // Sandía
-    { char: '🍇', val: 0.8 },   // Uva
-    { char: '🍌', val: 0.5 },   // Banana
-    { char: '🍭', val: 20 }     // Piruleta (Scatter)
+    { char: '💖', val: 10 },    { char: '💜', val: 5 },     { char: '💚', val: 4 },
+    { char: '💙', val: 3 },     { char: '🍎', val: 2 },     { char: '🍑', val: 1.5 },
+    { char: '🍉', val: 1 },     { char: '🍇', val: 0.8 },   { char: '🍌', val: 0.5 },
+    { char: '🍭', val: 20 }
 ];
 
-// Estado General
-let credit = 10000.00;
+let credit = 0; // Inicia en 0, se carga desde Supabase
 let baseBet = 2.00;
 let actualBet = 2.00;
 let doubleChance = false;
@@ -45,21 +52,59 @@ const buySuperCost = document.getElementById('buy-super-cost');
 const fsOverlay = document.getElementById('fs-overlay');
 const fsOverlayTitle = document.getElementById('fs-overlay-title');
 const fsCountText = document.getElementById('fs-count');
-
-// Contenedores del acumulador superior
 const bonusHeaderWin = document.getElementById('bonus-header-win');
 const bonusTotalAmount = document.getElementById('bonus-total-amount');
 const spinWinAccumulator = document.getElementById('spin-win-accumulator');
 const accumValue = document.getElementById('accum-value');
 const accumMult = document.getElementById('accum-mult');
-
-// ELEMENTOS DEL MODAL DE AYUDA
 const infoBtn = document.getElementById('info-btn');
 const infoModal = document.getElementById('info-modal');
 const closeModal = document.getElementById('close-modal');
 
 const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
 
+// ==========================================
+// FUNCIONES DE BASE DE DATOS (SUPABASE)
+// ==========================================
+async function loadBalanceFromDB() {
+    try {
+        const { data, error } = await supabaseClient
+            .from(NOMBRE_TABLA_USUARIOS)
+            .select(NOMBRE_COLUMNA_SALDO)
+            .eq('id', ID_DEL_USUARIO)
+            .single();
+
+        if (error) throw error;
+
+        if (data) {
+            credit = parseFloat(data[NOMBRE_COLUMNA_SALDO]);
+            updateUI();
+        }
+    } catch (error) {
+        console.error("Error al cargar saldo desde Supabase:", error);
+        statusMessage.innerText = "ERROR DE CONEXIÓN CON BD";
+    }
+}
+
+async function updateBalanceInDB(newBalance) {
+    try {
+        const updateData = {};
+        updateData[NOMBRE_COLUMNA_SALDO] = newBalance;
+
+        const { error } = await supabaseClient
+            .from(NOMBRE_TABLA_USUARIOS)
+            .update(updateData)
+            .eq('id', ID_DEL_USUARIO);
+
+        if (error) throw error;
+    } catch (error) {
+        console.error("Error al actualizar saldo en Supabase:", error);
+    }
+}
+
+// ==========================================
+// LÓGICA DEL JUEGO
+// ==========================================
 function initGrid() {
     gridContainer.innerHTML = '';
     gridState = [];
@@ -105,7 +150,6 @@ function updateUI() {
     buySuperCost.innerText = `$${(baseBet * 500).toFixed(2)}`;
 }
 
-// Control de Apuestas
 betPlus.addEventListener('click', () => {
     if (isSpinning || isFreeSpinsMode) return;
     if (baseBet < 100) { baseBet += 2.00; calculateActualBet(); }
@@ -130,12 +174,12 @@ doubleChanceToggle.addEventListener('change', (e) => {
     calculateActualBet();
 });
 
-// Comprar Giros Gratis Normales (x100)
 btnBuyFree.addEventListener('click', () => {
     if (isSpinning || isFreeSpinsMode) return;
     const cost = baseBet * 100;
     if (credit >= cost) {
         credit -= cost;
+        updateBalanceInDB(credit); // Actualizar base de datos
         isSuperBonusMode = false; 
         triggerFreeSpins(10);
     } else {
@@ -143,12 +187,12 @@ btnBuyFree.addEventListener('click', () => {
     }
 });
 
-// Comprar Super Giros Gratis (x500)
 btnBuySuper.addEventListener('click', () => {
     if (isSpinning || isFreeSpinsMode) return;
     const cost = baseBet * 500;
     if (credit >= cost) {
         credit -= cost;
+        updateBalanceInDB(credit); // Actualizar base de datos
         isSuperBonusMode = true; 
         triggerFreeSpins(15);
     } else {
@@ -156,11 +200,11 @@ btnBuySuper.addEventListener('click', () => {
     }
 });
 
-// Lanzar Tiro
 spinBtn.addEventListener('click', () => {
     if (isSpinning || isFreeSpinsMode) return;
     if (credit >= actualBet) {
         credit -= actualBet;
+        updateBalanceInDB(credit); // Descuenta apuesta en base de datos
         winDisplay.innerText = "$0.00";
         updateUI();
         executeSpin();
@@ -193,27 +237,15 @@ function generateNewSymbols() {
     }
 }
 
-// Probabilidad Ponderada de Casino Real
 function getRandomSymbolWithProbability() {
     const weights = {
-        '🍌': 110,
-        '🍇': 95,
-        '🍉': 85,
-        '🍑': 70,
-        '🍎': 60,
-        '💙': 40,
-        '💚': 28,
-        '💜': 18,
-        '💖': 8,
+        '🍌': 110, '🍇': 95, '🍉': 85, '🍑': 70, '🍎': 60,
+        '💙': 40, '💚': 28, '💜': 18, '💖': 8,
         '🍭': doubleChance ? 16 : 7 
     };
 
     if (isFreeSpinsMode) {
-        if (isSuperBonusMode) {
-            weights['💣'] = 22; 
-        } else {
-            weights['💣'] = 10; 
-        }
+        weights['💣'] = isSuperBonusMode ? 22 : 10;
     }
 
     let totalWeight = 0;
@@ -231,14 +263,9 @@ function getRandomSymbolWithProbability() {
     }
 
     if (selectedChar === '💣') {
-        const multipliers = [2, 3, 5, 8, 10, 15, 25, 50, 100];
-        let multWeights;
-        
-        if (isSuperBonusMode) {
-            multWeights = { 2: 0, 3: 0, 5: 10, 8: 20, 10: 30, 15: 20, 25: 12, 50: 6, 100: 2 };
-        } else {
-            multWeights = { 2: 50, 3: 30, 5: 15, 8: 8, 10: 5, 15: 3, 25: 2, 50: 1, 100: 0.5 };
-        }
+        let multWeights = isSuperBonusMode 
+            ? { 2: 0, 3: 0, 5: 10, 8: 20, 10: 30, 15: 20, 25: 12, 50: 6, 100: 2 }
+            : { 2: 50, 3: 30, 5: 15, 8: 8, 10: 5, 15: 3, 25: 2, 50: 1, 100: 0.5 };
         
         let totalMWeight = 0;
         for (let m in multWeights) totalMWeight += multWeights[m];
@@ -261,7 +288,6 @@ function getRandomSymbolWithProbability() {
     return { ...baseSym };
 }
 
-// Manejo de cascadas (Tumbles)
 async function handleTumbles() {
     let tumbleCount = 0;
     let accumulatedSpinWin = 0; 
@@ -281,17 +307,13 @@ async function handleTumbles() {
 
         const winningSymbolsList = [];
         let winThisStep = 0;
-
         const scatterQty = counts['🍭'] || 0;
         
         if (scatterQty >= 4) {
             winningSymbolsList.push('🍭');
             winThisStep += 15 * baseBet;
-            if (!isFreeSpinsMode) {
-                activatedFreeSpins = true;
-            } else {
-                extraFreeSpinsAwarded = true;
-            }
+            if (!isFreeSpinsMode) activatedFreeSpins = true;
+            else extraFreeSpinsAwarded = true;
         } else if (scatterQty === 3 && isFreeSpinsMode) {
             winningSymbolsList.push('🍭'); 
             extraFreeSpinsAwarded = true;
@@ -303,11 +325,9 @@ async function handleTumbles() {
             if (qty >= 8) {
                 winningSymbolsList.push(key);
                 const config = symbols.find(s => s.char === key);
-                
                 let factor = 1.0;
                 if (qty >= 10 && qty <= 11) factor = 1.5;
                 if (qty >= 12) factor = 3.0;
-
                 winThisStep += config.val * baseBet * factor;
             }
         }
@@ -315,7 +335,6 @@ async function handleTumbles() {
         if (winningSymbolsList.length > 0) {
             tumbleCount++;
             accumulatedSpinWin += winThisStep;
-
             spinWinAccumulator.style.display = 'flex';
             accumValue.innerText = `$${accumulatedSpinWin.toFixed(2)}`;
 
@@ -336,11 +355,9 @@ async function handleTumbles() {
             });
 
             await delay(300);
-
             applyGravity();
             renderGridDOM();
             await delay(300);
-
             fillEmptySpaces();
             renderGridDOM();
             await delay(400);
@@ -356,7 +373,6 @@ async function handleTumbles() {
 
         if (isFreeSpinsMode) {
             const domCells = document.querySelectorAll('.slot-cell');
-            
             gridState.forEach((item, index) => {
                 if (item && item.isBomb) {
                     multiplierSum += item.multiplierValue;
@@ -367,7 +383,6 @@ async function handleTumbles() {
             if (multiplierSum > 0) {
                 accumMult.innerText = ` x 💣${multiplierSum}`;
                 await delay(1200); 
-
                 finalSpinWin = accumulatedSpinWin * multiplierSum;
                 accumValue.innerText = `$${finalSpinWin.toFixed(2)}`;
                 statusMessage.innerText = `¡BOOM! MULTIPLICADO POR x${multiplierSum}`;
@@ -375,6 +390,7 @@ async function handleTumbles() {
         }
 
         credit += finalSpinWin;
+        updateBalanceInDB(credit); // SUMA EL PREMIO A LA BASE DE DATOS
         winDisplay.innerText = `$${finalSpinWin.toFixed(2)}`;
 
         if (isFreeSpinsMode) {
@@ -417,26 +433,18 @@ function applyGravity() {
         const activeElements = [];
         for (let row = 4; row >= 0; row--) {
             const index = row * 6 + col;
-            if (gridState[index] !== null) {
-                activeElements.push(gridState[index]);
-            }
+            if (gridState[index] !== null) activeElements.push(gridState[index]);
         }
         for (let row = 4; row >= 0; row--) {
             const index = row * 6 + col;
-            if (activeElements.length > 0) {
-                gridState[index] = activeElements.shift();
-            } else {
-                gridState[index] = null;
-            }
+            gridState[index] = activeElements.length > 0 ? activeElements.shift() : null;
         }
     }
 }
 
 function fillEmptySpaces() {
     for (let i = 0; i < 30; i++) {
-        if (gridState[i] === null) {
-            gridState[i] = getRandomSymbolWithProbability();
-        }
+        if (gridState[i] === null) gridState[i] = getRandomSymbolWithProbability();
     }
 }
 
@@ -444,10 +452,8 @@ function triggerFreeSpins(count) {
     isFreeSpinsMode = true;
     freeSpinsLeft = count;
     totalFsWin = 0;
-    
     bonusHeaderWin.style.display = 'flex';
     bonusTotalAmount.innerText = "$0.00";
-
     fsOverlayTitle.innerText = isSuperBonusMode ? "¡SUPER BONUS ADQUIRIDO!" : "¡GIROS GRATIS!";
     fsCountText.innerText = `${count} GIROS CON MULTIPLICADORES ÉPICOS`;
     fsOverlay.style.display = 'flex';
@@ -498,23 +504,20 @@ function finishFreeSpinsMode() {
     }, 4000);
 }
 
-// =========================================
-// SCRIPT DE CONTROL DEL MODAL DE INFORMACIÓN
-// =========================================
 infoBtn.addEventListener('click', () => {
-    if (isSpinning) return; // Evita que se abra en mitad de un giro
+    if (isSpinning) return;
     infoModal.style.display = 'flex';
 });
 
-closeModal.addEventListener('click', () => {
-    infoModal.style.display = 'none';
-});
-
-// Cerrar el modal también si el usuario hace clic en el área oscura de afuera
+closeModal.addEventListener('click', () => infoModal.style.display = 'none');
 window.addEventListener('click', (e) => {
-    if (e.target === infoModal) {
-        infoModal.style.display = 'none';
-    }
+    if (e.target === infoModal) infoModal.style.display = 'none';
 });
 
-window.onload = initGrid;
+// ==========================================
+// INICIALIZACIÓN
+// ==========================================
+window.onload = async () => {
+    await loadBalanceFromDB(); // Carga el saldo real desde Supabase primero
+    initGrid();                // Luego inicia visualmente la grilla
+};
