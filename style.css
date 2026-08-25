@@ -19,7 +19,6 @@
 }
 
 body {
-    /* Estilo Sweet Bonanza: Cielo mágico rosado y celeste */
     background: radial-gradient(circle at 50% 100%, #ffcbe5 0%, #a4e5ff 60%, #68bfff 100%);
     height: 100vh;
     display: flex;
@@ -46,7 +45,7 @@ body {
     transform: scale(1.05);
 }
 
-/* Nubes de azúcar / Fondo animado más sutil */
+/* Fondo animado */
 .bubble-bg {
     position: absolute;
     width: 200%;
@@ -94,7 +93,6 @@ body {
     justify-content: center;
 }
 
-/* Botones estilo Pragmatic 3D Caramelos */
 .btn-buy {
     border: 4px solid #fff;
     border-radius: 20px;
@@ -143,7 +141,7 @@ body {
     font-weight: bold;
 }
 
-/* Caja de Apuesta Extra */
+/* Caja Apuesta Extra */
 .bet-double-box {
     background: linear-gradient(to bottom, #72f772, #189118);
     border: 4px solid #fff;
@@ -171,7 +169,7 @@ body {
 .bet-double-value { font-size: 24px; margin: 6px 0; color: #fff; font-weight: bold; }
 .bet-double-sub { font-size: 10px; text-align: center; margin-bottom: 10px; opacity: 0.95; font-family: 'Arial', sans-serif; font-weight: bold; }
 
-/* Switch Slider mejorado */
+/* Switch Slider */
 .toggle-container {
     display: flex;
     align-items: center;
@@ -215,13 +213,52 @@ input:checked + .slider:before { transform: translateX(26px); }
 /* Área Principal */
 .main-game {
     flex-grow: 1;
+    min-height: 0;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     position: relative;
 }
 
-/* MARCADOR DEL BONUS ACUMULADO ARRIBA */
+/* Logo del juego: nombre con paletas a los costados, estilo Sweet Bonanza */
+.game-title-banner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 6px;
+    flex-shrink: 0;
+}
+
+.game-title-banner img {
+    height: 34px;
+    width: auto;
+    filter: drop-shadow(2px 3px 3px rgba(0,0,0,0.5));
+    animation: paletaWiggle 2.4s ease-in-out infinite;
+}
+
+.game-title-banner img:last-child {
+    animation-delay: 1.2s;
+}
+
+@keyframes paletaWiggle {
+    0%, 100% { transform: rotate(-8deg); }
+    50% { transform: rotate(8deg); }
+}
+
+.game-title-text {
+    font-size: 26px;
+    letter-spacing: 1px;
+    background: linear-gradient(180deg, #fff 10%, var(--gold) 60%, #ff9900 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    -webkit-text-stroke: 1.5px #7a1a5c;
+    text-shadow: 0 4px 0px rgba(0,0,0,0.35);
+    text-transform: uppercase;
+    text-align: center;
+}
+
 .bonus-header-win {
     background: linear-gradient(180deg, #ff1a8c, #8000ff);
     border: 4px solid var(--gold);
@@ -235,15 +272,6 @@ input:checked + .slider:before { transform: translateX(26px); }
     animation: floaty 3s ease-in-out infinite alternate;
     margin-bottom: 8px;
     position: relative;
-}
-
-.bonus-header-win::after {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0; bottom: 0;
-    border-radius: 11px;
-    box-shadow: inset 0 0 15px var(--gold);
-    pointer-events: none;
 }
 
 @keyframes floaty {
@@ -265,7 +293,6 @@ input:checked + .slider:before { transform: translateX(26px); }
     font-weight: bold;
 }
 
-/* ACUMULADOR DE POZO DEL TIRO EN CURSO */
 .spin-win-accumulator {
     background: linear-gradient(to right, rgba(0,0,0,0), rgba(0, 0, 0, 0.8), rgba(0,0,0,0));
     padding: 8px 15px;
@@ -281,9 +308,10 @@ input:checked + .slider:before { transform: translateX(26px); }
 .accum-value { font-size: 22px; color: #fff; text-shadow: 0 0 10px var(--gold); }
 .accum-mult { font-size: 22px; color: var(--neon-green); font-weight: bold; text-shadow: 0 0 10px rgba(59, 241, 59, 0.8); }
 
-/* Contenedor Grilla: Diseño tipo marco de oro / caramelo */
+/* Grilla */
 .slot-grid-container {
     flex-grow: 1;
+    min-height: 0;
     position: relative;
     border: 8px solid;
     border-image: repeating-linear-gradient(45deg, #ff4d4d, #ff4d4d 20px, #ffffff 20px, #ffffff 40px) 10;
@@ -293,48 +321,55 @@ input:checked + .slider:before { transform: translateX(26px); }
     background: rgba(0, 0, 0, 0.25);
 }
 
-/* Grilla Interna Transparente */
 .slot-grid {
     display: grid;
-    grid-template-columns: repeat(6, 1fr);
-    grid-template-rows: repeat(5, 1fr);
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    grid-template-rows: repeat(5, minmax(0, 1fr));
     gap: 4px;
     padding: 8px;
     height: 100%;
 }
 
-/* Celdas Dulce Gelatinosas */
 .slot-cell {
     background: rgba(255, 255, 255, 0.1);
     border-radius: 12px;
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 3rem;
     box-shadow: inset 0 2px 10px rgba(255,255,255,0.2);
     position: relative;
     transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    overflow: visible;
+    min-width: 0;
+    min-height: 0;
 }
 
-.slot-cell span {
-    filter: drop-shadow(4px 6px 4px rgba(0,0,0,0.4));
+.slot-cell .symbol-img {
+    width: 72%;
+    height: 72%;
+    object-fit: contain;
+    filter: drop-shadow(3px 5px 4px rgba(0,0,0,0.4));
     display: inline-block;
     will-change: transform;
+    pointer-events: none;
+}
+
+.slot-cell.bomb-cell {
+    background: radial-gradient(circle, rgba(255,234,0,0.35) 0%, rgba(255,0,85,0.25) 100%);
 }
 
 .slot-cell.landing {
-    animation: jellyBounce 0.6s cubic-bezier(0.28, 0.84, 0.42, 1);
+    animation: jellyBounce 0.5s cubic-bezier(0.28, 0.84, 0.42, 1);
 }
 
 @keyframes jellyBounce {
-    0% { transform: scaleY(1.4) translateY(-150px); opacity: 0; }
+    0% { transform: scaleY(1.4) translateY(-120px); opacity: 0; }
     40% { transform: scaleY(0.7) translateY(10px); opacity: 1; }
     60% { transform: scaleY(1.15) translateY(-5px); }
     80% { transform: scaleY(0.95) translateY(2px); }
     100% { transform: scaleY(1) translateY(0); }
 }
 
-/* Bombas Multiplicadoras Estilo Bomba de Dulce */
 .bomb-badge {
     position: absolute;
     bottom: 0px;
@@ -349,27 +384,27 @@ input:checked + .slider:before { transform: translateX(26px); }
     box-shadow: 0 4px 8px rgba(0,0,0,0.5), inset 0 2px 4px rgba(255,255,255,0.5);
     font-weight: bold;
     transform: rotate(-10deg);
+    z-index: 4;
 }
 
-/* Animaciones de Juego */
-.slot-cell.spinning span {
+.slot-cell.spinning .symbol-img {
     animation: spinFall 0.1s infinite linear;
     filter: blur(2px);
 }
 
 .slot-cell.win-pop {
-    animation: popOut 0.4s forwards cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    animation: popOut 0.35s forwards cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 .slot-cell.win-highlight {
     background: radial-gradient(circle, rgba(255, 247, 173, 0.6) 0%, rgba(255, 215, 0, 0.4) 100%);
-    transform: scale(1.15);
+    transform: scale(1.12);
     box-shadow: 0 0 30px var(--gold);
     z-index: 2;
 }
 
 .slot-cell.bomb-pulse {
-    animation: bombPulseAnimation 0.6s infinite alternate;
+    animation: bombPulseAnimation 0.5s infinite alternate;
     z-index: 3;
 }
 
@@ -378,7 +413,7 @@ input:checked + .slider:before { transform: translateX(26px); }
     100% { transform: scale(1.25); box-shadow: 0 0 40px #ffd700; }
 }
 
-/* Barra de Control Inferior Estilo Pragmatic */
+/* Control Bar */
 .control-bar {
     background: linear-gradient(to bottom, #1a082b, #0d0417);
     border-radius: 40px;
@@ -407,26 +442,23 @@ input:checked + .slider:before { transform: translateX(26px); }
     font-size: 18px;
     box-shadow: 0 4px 6px rgba(0,0,0,0.4);
     transition: transform 0.1s, filter 0.2s;
+    background-image: url('info.png');
+    background-size: 55%;
+    background-repeat: no-repeat;
+    background-position: center;
+    overflow: hidden;
+    text-indent: -9999px;
 }
 
 .info-btn:hover { filter: brightness(1.2); transform: scale(1.05); }
 
-.stats-section {
-    display: flex;
-    gap: 30px;
-}
-
-.stat-box {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
+.stats-section { display: flex; gap: 30px; }
+.stat-box { display: flex; flex-direction: column; align-items: center; }
 .stat-label { font-size: 10px; color: #a894c2; letter-spacing: 1px; }
 .stat-value { font-size: 18px; color: var(--gold); text-shadow: 1px 1px 2px rgba(0,0,0,0.8); }
 .stat-value.win { color: var(--neon-green); text-shadow: 0 0 8px rgba(59, 241, 59, 0.4); }
 .status-msg { font-size: 14px; color: #fff; text-align: center; width: 250px; text-transform: uppercase; letter-spacing: 1px; text-shadow: 0 0 5px rgba(255,255,255,0.5); }
-.spin-section { display: flex; align-items: center; gap: 15px; }
+.spin-section { display: flex; align-items: center; gap: 10px; }
 
 .bet-adjust {
     background: linear-gradient(to bottom, #555, #222);
@@ -441,10 +473,7 @@ input:checked + .slider:before { transform: translateX(26px); }
     align-items: center;
     justify-content: center;
     box-shadow: 0 4px 6px rgba(0,0,0,0.4);
-    transition: filter 0.1s;
 }
-
-.bet-adjust:active { filter: brightness(0.8); }
 
 .spin-outer {
     background: linear-gradient(to bottom, #fff, #888);
@@ -467,24 +496,26 @@ input:checked + .slider:before { transform: translateX(26px); }
     align-items: center;
     justify-content: center;
     transition: transform 0.05s;
-    text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
 }
 
 .spin-btn:active { transform: scale(0.92); }
 
-/* BOTÓN AUTO PLAY ESTILO PRAGMATIC */
 .auto-btn {
     background: linear-gradient(to bottom, #ff9900, #cc7a00);
     color: white;
     border: 2px solid #ffcc66;
-    padding: 8px 12px;
+    padding: 8px 4px;
     border-radius: 20px;
-    font-size: 14px;
+    font-size: 11px;
     font-weight: bold;
     cursor: pointer;
     box-shadow: 0 4px 6px rgba(0,0,0,0.4);
-    margin-left: 5px;
-    transition: all 0.2s;
+    width: 86px;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    flex-shrink: 0;
 }
 
 .auto-btn.active-auto {
@@ -498,15 +529,15 @@ input:checked + .slider:before { transform: translateX(26px); }
     100% { transform: scale(1.05); box-shadow: 0 0 15px #ff3333; }
 }
 
-/* Overlays */
-.fs-overlay {
+/* Modales y Overlays */
+.fs-overlay, .info-modal {
     position: fixed;
     top: 0; left: 0; width: 100vw; height: 100vh;
     background: rgba(0,0,0,0.85);
     display: none;
     justify-content: center;
     align-items: center;
-    z-index: 100;
+    z-index: 200;
     backdrop-filter: blur(5px);
 }
 
@@ -517,24 +548,12 @@ input:checked + .slider:before { transform: translateX(26px); }
     border: 8px solid var(--gold);
     color: white;
     text-align: center;
-    box-shadow: 0 0 60px var(--gold), inset 0 0 30px rgba(0,0,0,0.5);
+    box-shadow: 0 0 60px var(--gold);
     animation: scaleUp 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
-.fs-box h2 { font-size: 42px; margin-bottom: 15px; text-shadow: 4px 4px 0px #000; color: #fff; letter-spacing: 2px; }
-.fs-box p { font-size: 26px; text-shadow: 2px 2px 0px #000; color: var(--gold); font-weight: bold; }
-
-.info-modal {
-    position: fixed;
-    top: 0; left: 0; 
-    width: 100vw; height: 100vh;
-    background: rgba(0, 0, 0, 0.85);
-    display: none;
-    justify-content: center;
-    align-items: center;
-    z-index: 200;
-    backdrop-filter: blur(5px);
-}
+.fs-box h2 { font-size: 42px; margin-bottom: 15px; color: #fff; text-shadow: 4px 4px 0px #000; }
+.fs-box p { font-size: 26px; color: var(--gold); font-weight: bold; text-shadow: 2px 2px 0px #000; }
 
 .info-content {
     background: linear-gradient(135deg, #2b114d 0%, #1a0a2e 100%);
@@ -546,113 +565,97 @@ input:checked + .slider:before { transform: translateX(26px); }
     padding: 30px;
     color: white;
     position: relative;
-    box-shadow: 0 0 50px rgba(255, 215, 0, 0.3);
     display: flex;
     flex-direction: column;
     animation: scaleUp 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
-.info-content h2 { font-size: 28px; text-align: center; margin-bottom: 20px; color: var(--gold); text-shadow: 2px 2px 0px #000; }
-
+.info-content h2 { font-size: 28px; text-align: center; margin-bottom: 20px; color: var(--gold); }
 .info-scroll { overflow-y: auto; padding-right: 15px; }
-.info-scroll::-webkit-scrollbar { width: 10px; }
-.info-scroll::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.3); border-radius: 10px; }
-.info-scroll::-webkit-scrollbar-thumb { background: linear-gradient(to bottom, #ff3385, #7f00ff); border-radius: 10px; border: 2px solid #2b114d; }
-
-.info-scroll h3 { font-size: 16px; color: #ff7db5; margin-top: 20px; margin-bottom: 10px; letter-spacing: 1px; }
+.info-scroll h3 { font-size: 16px; color: #ff7db5; margin-top: 20px; margin-bottom: 10px; }
 .info-scroll p, .info-scroll ul { font-size: 13px; line-height: 1.6; font-family: 'Arial', sans-serif; color: #e6dbf5; margin-bottom: 12px; }
 .info-scroll ul { padding-left: 20px; }
-.info-scroll ul li { margin-bottom: 8px; }
 .info-scroll hr { border: 0; height: 1px; background: rgba(255,255,255,0.2); margin: 20px 0; }
 
 .payout-table { width: 100%; border-collapse: collapse; margin: 15px 0; font-size: 13px; font-family: 'Arial', sans-serif; }
 .payout-table th, .payout-table td { padding: 10px; text-align: center; border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
-.payout-table th { background: rgba(0, 0, 0, 0.3); color: var(--gold); font-size: 12px; font-weight: bold; }
-.payout-table td:first-child { font-size: 20px; } 
+.payout-table th { background: rgba(0, 0, 0, 0.3); color: var(--gold); }
+.payout-table td:first-child { display: flex; align-items: center; gap: 8px; justify-content: flex-start; font-weight: bold; }
+.payout-table td:first-child img { width: 26px; height: 26px; object-fit: contain; }
 
-.close-modal {
-    position: absolute;
-    top: 15px;
-    right: 20px;
-    font-size: 36px;
-    color: #ccc;
-    cursor: pointer;
-    transition: color 0.2s, transform 0.2s;
-    line-height: 1;
-}
+.close-modal { position: absolute; top: 15px; right: 20px; font-size: 36px; color: #ccc; cursor: pointer; }
+.close-modal:hover { color: #ff4d4d; }
 
-.close-modal:hover { color: #ff4d4d; transform: scale(1.2); }
-
-/* AutoPlay Modal Styles Extras */
 .auto-speed-options { display: flex; justify-content: space-evenly; margin: 15px 0; font-family: Arial, sans-serif; }
-.auto-stop-options { text-align: left; margin-left: 20%; font-family: Arial, sans-serif; font-size: 14px;}
-.auto-input { width: 75%; padding: 8px; margin-top: 8px; border-radius: 8px; border: 1px solid #ccc; font-family: Arial; }
+.auto-stop-options { text-align: left; margin-left: 15%; font-family: Arial, sans-serif; font-size: 14px; }
+.auto-input { width: 80%; padding: 8px; margin-top: 8px; border-radius: 8px; border: 1px solid #ccc; }
 .start-auto-btn {
     background: linear-gradient(to bottom, #3bf13b, #189118);
-    color: white; border: 2px solid #fff; padding: 15px 30px; font-weight: bold; border-radius: 25px;
-    cursor: pointer; font-size: 18px; text-shadow: 1px 1px 2px #000; box-shadow: 0 4px 10px rgba(0,0,0,0.5);
-    margin-top: 10px; transition: transform 0.1s;
-}
-.start-auto-btn:active { transform: scale(0.95); }
-
-/* Animaciones */
-@keyframes spinFall {
-    0% { transform: translateY(-20px); opacity: 0.8; }
-    100% { transform: translateY(20px); opacity: 0.8; }
+    color: white; border: 2px solid #fff; padding: 12px 25px; font-weight: bold; border-radius: 25px;
+    cursor: pointer; font-size: 18px; margin-top: 15px;
 }
 
-@keyframes popOut {
-    0% { transform: scale(1); opacity: 1; filter: brightness(1); }
-    50% { transform: scale(1.4); opacity: 0.8; filter: brightness(1.5); }
-    100% { transform: scale(0); opacity: 0; filter: brightness(2); }
-}
+@keyframes spinFall { 0% { transform: translateY(-20px); opacity: 0.8; } 100% { transform: translateY(20px); opacity: 0.8; } }
+@keyframes popOut { 0% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.4); opacity: 0.8; } 100% { transform: scale(0); opacity: 0; } }
+@keyframes scaleUp { 0% { transform: scale(0.6); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+@keyframes scaleIn { 0% { transform: scale(0.5); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
 
-@keyframes scaleUp {
-    0% { transform: scale(0.6); opacity: 0; }
-    100% { transform: scale(1); opacity: 1; }
-}
-
-@keyframes scaleIn {
-    0% { transform: scale(0.5); opacity: 0; }
-    100% { transform: scale(1); opacity: 1; }
-}
-
-/* ========================================================
-   ADAPTACIÓN PARA CELULARES (RESPONSIVE MOBILE)
-   ======================================================== */
+/* Mobile Responsive */
 @media (max-width: 850px) {
-    body { align-items: flex-start; height: 100dvh; background: radial-gradient(circle at 50% 100%, #ffcbe5 0%, #a4e5ff 100%); }
+    body { align-items: flex-start; height: 100dvh; }
     .casino-logo-link { top: 5px; left: 10px; }
     .casino-logo-link img { max-height: 40px; }
-    .game-container { flex-direction: column; width: 100vw; height: 100dvh; max-width: none; max-height: none; border-radius: 0; padding: 6px; gap: 6px; background: transparent; box-shadow: none; padding-top: 45px;}
-    .main-game { order: 1; flex: 1; min-height: 0; display: flex; flex-direction: column; justify-content: space-between; }
-    .side-panel { order: 2; width: 100%; flex-direction: row; justify-content: space-between; align-items: stretch; gap: 6px; padding: 4px 0; }
-    .btn-buy, .bet-double-box { flex: 1; padding: 6px 4px; border-radius: 14px; border-width: 2px; justify-content: center; box-shadow: 0 4px 0px rgba(0,0,0,0.2); }
-    .btn-buy:active { transform: translateY(2px); box-shadow: 0 2px 0px rgba(0,0,0,0.2); }
-    .btn-title, .bet-double-title { font-size: 9px; line-height: 1.1; }
+    .game-container { flex-direction: column; width: 100vw; height: 100dvh; border-radius: 0; padding: 6px; gap: 6px; background: transparent; padding-top: 45px;}
+    .main-game { order: 1; flex: 1; }
+    .side-panel { order: 2; width: 100%; flex-direction: row; gap: 6px; }
+    .btn-buy, .bet-double-box { flex: 1; padding: 6px 4px; border-radius: 14px; }
+    .btn-title, .bet-double-title { font-size: 9px; }
     .btn-value, .bet-double-value { font-size: 15px; margin: 2px 0; }
     .bet-double-sub { display: none; }
-    .switch { width: 40px; height: 18px; }
-    .slider:before { height: 12px; width: 12px; left: 2px; bottom: 1px; }
-    input:checked + .slider:before { transform: translateX(22px); }
-    .toggle-text { font-size: 9px; }
-    .slot-grid-container { flex: 1; min-height: 0; border-width: 6px; border-radius: 12px; }
+    .game-title-banner img { height: 20px; }
+    .game-title-text { font-size: 15px; }
+    .slot-grid-container { border-width: 6px; }
     .slot-grid { gap: 3px; padding: 4px; }
-    .slot-cell { font-size: clamp(1.4rem, 6.5vw, 2.5rem); border-radius: 8px; background: rgba(255,255,255,0.05); }
-    .bomb-badge { font-size: 11px; padding: 2px 5px; bottom: -2px; right: -2px; }
-    .control-bar { padding: 8px; margin-top: 4px; border-radius: 20px; border-width: 2px; }
-    .status-msg { font-size: 10px; max-width: 90px; line-height: 1.1; }
-    .stat-box { gap: 1px; }
-    .stats-section { gap: 10px; }
+    .control-bar { padding: 6px; margin-top: 4px; }
+    .status-msg { font-size: 9px; max-width: 80px; }
+    .stats-section { gap: 8px; }
     .stat-label { font-size: 8px; }
     .stat-value { font-size: 11px; }
-    .spin-btn { width: 48px; height: 48px; font-size: 24px; }
+    .spin-btn { width: 46px; height: 46px; font-size: 22px; }
     .bet-adjust { width: 26px; height: 26px; font-size: 16px; }
-    .auto-btn { font-size: 10px; padding: 6px 8px; margin-left: 2px;}
-    .info-btn { width: 28px; height: 28px; font-size: 14px; }
-    .info-content { width: 95%; max-height: 85vh; padding: 16px; }
-    .info-content h2 { font-size: 20px; }
-    .fs-box { padding: 30px 20px; width: 90%; }
-    .fs-box h2 { font-size: 28px; }
-    .fs-box p { font-size: 18px; }
+    .auto-btn { font-size: 10px; padding: 6px; }
+}
+/* --- NUEVO BOTÓN DE VELOCIDAD ELEGANTE --- */
+.speed-btn {
+    background: linear-gradient(to bottom, #2b114d, #1a0a2e);
+    color: var(--gold);
+    border: 2px solid var(--gold);
+    padding: 8px 4px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.4);
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+    transition: transform 0.1s, box-shadow 0.1s;
+    width: 70px;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    flex-shrink: 0;
+}
+
+.speed-btn:active {
+    transform: scale(0.95);
+}
+
+/* Ajustes Responsive para que entren los 5 botones en la barra */
+@media (max-width: 850px) {
+    .spin-section { gap: 5px; }
+    .auto-btn, .speed-btn { 
+        font-size: 8px; 
+        padding: 6px 3px; 
+        width: 54px;
+    }
 }
