@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Victory Bass</title>
+    <title>Candy Bonanza</title>
     <link rel="stylesheet" href="style.css">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
@@ -12,26 +12,30 @@
         <img src="Logo-inicial.png" alt="Volver al Menú" id="casino-logo">
     </a>
 
-    <div class="water-bg"></div>
-    <div class="dragonfly-layer" id="dragonfly-layer">
-        <img src="LIBELULA.png" alt="">
+    <div class="volume-control" id="volume-control">
+        <button class="volume-btn" id="volume-btn" title="Sonido">🔊</button>
+        <div class="volume-popup" id="volume-popup">
+            <input type="range" id="volume-slider" min="0" max="100" value="60" class="volume-slider">
+        </div>
     </div>
+
+    <div class="bubble-bg"></div>
 
     <div class="game-container">
         <div class="side-panel">
-            <button class="btn-buy purple" id="btn-buy-free">
+            <button class="btn-buy pink" id="btn-buy-free">
                 <span class="btn-title">COMPRAR GIROS GRATIS</span>
                 <span class="btn-value" id="buy-fs-cost">$200.00</span>
             </button>
-            <button class="btn-buy gold" id="btn-buy-super">
-                <span class="btn-title">COMPRAR SÚPER PESCA</span>
+            <button class="btn-buy orange" id="btn-buy-super">
+                <span class="btn-title">COMPRAR SUPER GIROS</span>
                 <span class="btn-value" id="buy-super-cost">$1,000.00</span>
             </button>
-
+            
             <div class="bet-double-box">
                 <span class="bet-double-title">APUESTA</span>
                 <span class="bet-double-value" id="double-bet-display">$2.50</span>
-                <span class="bet-double-sub">DOBLE CHANCE DE SCATTER</span>
+                <span class="bet-double-sub">DOBLE CHANCE DE GANAR</span>
                 <div class="toggle-container">
                     <span class="toggle-text">OFF</span>
                     <label class="switch">
@@ -45,22 +49,14 @@
 
         <div class="main-game">
             <div class="game-title-banner">
-                <img src="pescador.png" alt="" class="banner-side-img">
-                <span class="game-title-text">Victory Bass</span>
-                <img src="scatter.png" alt="" class="banner-side-img">
+                <img src="paleta.png" alt="">
+                <span class="game-title-text">Candy Bonanza</span>
+                <img src="paleta.png" alt="">
             </div>
 
             <div class="bonus-header-win" id="bonus-header-win">
-                <div class="bonus-title">GANANCIA TOTAL DE GIROS GRATIS</div>
+                <div class="bonus-title">GANANCIA TOTAL DEL BONUS</div>
                 <div class="bonus-total-amount" id="bonus-total-amount">$0.00</div>
-            </div>
-
-            <div class="wild-meter" id="wild-meter">
-                <span class="wild-meter-label">PESCADORES ACUMULADOS</span>
-                <div class="wild-meter-dots" id="wild-meter-dots">
-                    <span class="wm-dot"></span><span class="wm-dot"></span><span class="wm-dot"></span><span class="wm-dot"></span>
-                </div>
-                <span class="wild-meter-level" id="wild-meter-level">NIVEL 1 · MULTIPLICADOR x1</span>
             </div>
 
             <div class="spin-win-accumulator" id="spin-win-accumulator">
@@ -77,7 +73,7 @@
                 <div class="info-section">
                     <button class="info-btn" id="info-btn">i</button>
                 </div>
-
+                
                 <div class="stats-section">
                     <div class="stat-box">
                         <span class="stat-label">CRÉDITO</span>
@@ -94,7 +90,7 @@
                 </div>
 
                 <div class="status-msg" id="status-message">
-                    ¡LISTO PARA PESCAR!
+                    ¡HACÉ JUGAR ESOS DULCES!
                 </div>
 
                 <div class="spin-section">
@@ -106,21 +102,6 @@
                     <button class="speed-btn" id="main-speed-btn">NORM</button>
                     <button class="auto-btn" id="auto-open-btn">AUTO</button>
                 </div>
-            </div>
-        </div>
-
-        <div class="side-panel-right">
-            <div class="info-mirror-box">
-                <img src="scatter.png" alt="Scatter">
-                <span>3+ SCATTERS<br>ACTIVAN GIROS GRATIS</span>
-            </div>
-            <div class="info-mirror-box">
-                <img src="pescador.png" alt="Pescador Wild">
-                <span>EL PESCADOR PESCA<br>TODO EL DINERO EN PANTALLA</span>
-            </div>
-            <div class="info-mirror-box">
-                <img src="CAJA.png" alt="Caja">
-                <span>GANANCIA MÁXIMA<br>5,000x LA APUESTA</span>
             </div>
         </div>
     </div>
@@ -159,51 +140,42 @@
     <div class="info-modal" id="info-modal">
         <div class="info-content">
             <span class="close-modal" id="close-modal">&times;</span>
-            <h2>🎣 REGLAS DEL JUEGO 🐟</h2>
+            <h2>🍭 REGLAS DEL JUEGO 🍬</h2>
             <div class="info-scroll">
                 <h3>MECÁNICA PRINCIPAL</h3>
-                <p><strong>Grilla 5x3, 10 líneas de pago fijas.</strong> Los premios se pagan de izquierda a derecha, empezando en el rodillo 1, con 3 o más símbolos iguales en una línea activa.</p>
-                <p><strong>Pescador (Wild):</strong> Sustituye a todos los símbolos excepto al Dinero y al Scatter. Además, cada vez que aparece en pantalla, <strong>pesca (cobra) todos los símbolos de Dinero visibles</strong>, sumando sus valores y multiplicando por la cantidad de Pescadores en pantalla.</p>
-                <p><strong>Símbolos de Dinero (🎣/🧰):</strong> Caen solo en los rodillos 2 a 5, muestran un multiplicador de la apuesta base, y solo se cobran si hay al menos un Pescador en la pantalla.</p>
-                <p><strong>Libélula 🐉:</strong> De forma aleatoria puede sobrevolar la pantalla y convertir entre 1 y 3 símbolos en símbolos de Dinero antes de resolver el tiro.</p>
+                <p><strong>"Pay Anywhere" (Paga donde sea):</strong> ¡No existen las líneas de pago! Los premios se otorgan si lográs juntar <strong>8 o más símbolos idénticos</strong> en cualquier parte de la pantalla.</p>
+                <p><strong>Mecánica de Cascada (Tumble):</strong> Al ganar, los dulces explotan y desaparecen. Los símbolos superiores caen para rellenar los huecos y se generan nuevas oportunidades en el mismo tiro.</p>
                 <hr>
                 <h3>TABLA DE PAGOS (Multiplicador por Apuesta Base)</h3>
                 <table class="payout-table">
                     <thead>
                         <tr>
                             <th>Símbolo</th>
-                            <th>3</th>
-                            <th>4</th>
-                            <th>5</th>
+                            <th>8 - 9</th>
+                            <th>10 - 11</th>
+                            <th>12 o más</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr><td><img src="pescador.png" alt=""> Pescador (Wild)</td><td>x2.00</td><td>x5.00</td><td>x25.00</td></tr>
-                        <tr><td><img src="pez_enorme.png" alt=""> Pez Enorme</td><td>x1.00</td><td>x3.00</td><td>x10.00</td></tr>
-                        <tr><td><img src="pez3.png" alt=""> Pez</td><td>x0.75</td><td>x2.00</td><td>x5.00</td></tr>
-                        <tr><td><img src="pez2.png" alt=""> Pez</td><td>x0.50</td><td>x1.50</td><td>x3.00</td></tr>
-                        <tr><td><img src="pez1.png" alt=""> Pez</td><td>x0.40</td><td>x1.00</td><td>x2.50</td></tr>
-                        <tr><td><img src="pezmediano.png" alt=""> Pez Mediano</td><td>x0.30</td><td>x0.75</td><td>x1.50</td></tr>
-                        <tr><td><img src="pezchuiquito.png" alt=""> Pez Chiquito</td><td>x0.25</td><td>x0.60</td><td>x1.25</td></tr>
-                        <tr><td><img src="A.png" alt=""> A</td><td>x0.20</td><td>x0.50</td><td>x1.00</td></tr>
-                        <tr><td><img src="K.png" alt=""> K</td><td>x0.15</td><td>x0.40</td><td>x0.75</td></tr>
-                        <tr><td><img src="Q.png" alt=""> Q</td><td>x0.15</td><td>x0.40</td><td>x0.75</td></tr>
-                        <tr><td><img src="J.png" alt=""> J</td><td>x0.10</td><td>x0.25</td><td>x0.50</td></tr>
-                        <tr><td><img src="10.png" alt=""> 10</td><td>x0.10</td><td>x0.25</td><td>x0.50</td></tr>
-                        <tr><td><img src="scatter.png" alt=""> Victory Bass (Scatter)</td><td colspan="3">3 = x2.00 · 4 = x5.00 · 5 = x25.00. Además activa 10 Giros Gratis (en cualquier parte de la pantalla)</td></tr>
+                        <tr><td><img src="corazon.png" alt=""> Corazón</td><td>x14.0</td><td>x21.0</td><td>x42.0</td></tr>
+                        <tr><td><img src="violeta.png" alt=""> Caramelo</td><td>x7.0</td><td>x10.5</td><td>x21.0</td></tr>
+                        <tr><td><img src="verde.png" alt=""> Caramelo</td><td>x5.6</td><td>x8.4</td><td>x16.8</td></tr>
+                        <tr><td><img src="azul.png" alt=""> Caramelo</td><td>x4.2</td><td>x6.3</td><td>x12.6</td></tr>
+                        <tr><td><img src="manzana.png" alt=""> Manzana</td><td>x2.8</td><td>x4.2</td><td>x8.4</td></tr>
+                        <tr><td><img src="ciruela.png" alt=""> Ciruela</td><td>x2.1</td><td>x3.15</td><td>x6.3</td></tr>
+                        <tr><td><img src="uvaverde__sandia_.png" alt=""> Uva Verde</td><td>x1.4</td><td>x2.1</td><td>x4.2</td></tr>
+                        <tr><td><img src="uva.png" alt=""> Uva</td><td>x1.1</td><td>x1.65</td><td>x3.3</td></tr>
+                        <tr><td><img src="anana__banana_.png" alt=""> Ananá</td><td>x0.7</td><td>x1.05</td><td>x2.1</td></tr>
+                        <tr><td><img src="paleta.png" alt=""> Paleta (Scatter)</td><td colspan="3">4 paletas = x3 · 5 paletas = x5 · 6 paletas = x100. Además activa Giros Gratis</td></tr>
                     </tbody>
                 </table>
                 <hr>
-                <h3>GIROS GRATIS & SÚPER PESCA</h3>
-                <p>Se activan obteniendo <strong>3 o más símbolos Scatter</strong> o comprando el bono directamente. Durante los Giros Gratis, 3+ Scatters otorgan <strong>+5 giros extra</strong>.</p>
+                <h3>MODO GIROS GRATIS & SUPER BONUS</h3>
+                <p>Se activa obteniendo <strong>4 o más Paletas (🍭)</strong> o comprando el bono directamente. 3 paletas durante el bonus otorgan +5 giros extra.</p>
                 <ul>
-                    <li><strong>Súper Pesca:</strong> Comprala directamente para arrancar 10 Giros Gratis con muchos más símbolos de Dinero y Pescadores en pantalla.</li>
+                    <li><strong>Bombas Multiplicadoras (💣):</strong> Caen SOLO durante el bonus, multiplicando el total acumulado de la cascada (hasta x100). Cuantas más caigan en un tiro, más grande el multiplicador.</li>
                     <li><strong>Ganancia Máxima:</strong> Topada a <strong>5,000x</strong> la apuesta base.</li>
                 </ul>
-                <hr>
-                <h3>MEDIDOR DE PESCADORES (Multiplicador Cooperativo)</h3>
-                <p>Durante los Giros Gratis, cada Pescador que aparece en pantalla se suma a un <strong>medidor acumulado</strong>. Al juntar <strong>4 Pescadores</strong>, subís de nivel: se otorgan <strong>+10 Giros Gratis extra</strong> y un <strong>multiplicador permanente</strong> se aplica a toda pesca de dinero desde ese momento.</p>
-                <p><strong>Nivel 1:</strong> x1 · <strong>Nivel 2:</strong> x2 · <strong>Nivel 3:</strong> x3 · <strong>Nivel 4:</strong> x10 (nivel máximo, ya no retriggerea).</p>
             </div>
         </div>
     </div>
