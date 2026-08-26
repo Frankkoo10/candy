@@ -1081,4 +1081,4 @@ window.addEventListener('pointerdown', unlockAudioOnce);
 // (Monte Carlo, cientos de miles de tiradas) para calibrar los pesos de arriba
 // de forma que: la frecuencia de acierto en juego base quede en ~28-32%
 // (antes con los pesos viejos rondaba entre "nunca" y "más del 60%"), y ningún
-// símbolo individual sea tan común como para pagar en casi todas las tiradas.
+// símbolo individual sea tan común como para pagar en casi todas las tiradas..
